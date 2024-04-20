@@ -15,7 +15,7 @@ namespace SimpLog.Email.Services.FileServices
         public static Dictionary<string, StringBuilder> Logs = new Dictionary<string, StringBuilder>();
 
         public static Models.AppSettings.Configuration configuration = ConfigurationServices.ConfigService.BindConfigObject();
-
+        
         internal readonly bool? _Trace_Email  = (configuration.LogType.Trace.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Trace.SendEmail);
         internal readonly bool? _Debug_Email  = (configuration.LogType.Debug.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Debug.SendEmail);
         internal readonly bool? _Info_Email   = (configuration.LogType.Info.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Info.SendEmail);

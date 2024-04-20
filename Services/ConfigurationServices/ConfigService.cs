@@ -139,10 +139,10 @@ namespace SimpLog.Email.Services.ConfigurationServices
             {
                 Email_Configuration     = new EmailConfiguration()
                 {
+                    SendEmail_Globally = _SendEmail_Globally,
                     Email_From          = _Email_From,
                     Email_To            = _Email_To,
                     Email_Bcc           = _Email_BCC,
-                    SendEmail_Globally  = _SendEmail_Globally,
                     Email_Connection    = new EmailConnection()
                     {
                         Host        = _Host,

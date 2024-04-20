@@ -1,6 +1,5 @@
-# What is SimpLog
-Simple and very flexible tool for development with .NET Core. Saves logs to a file, or a database where you want. Also gives opportunity to 
-receive logs via email with the proper configuration. SimpLog.Email is for those who want to use only the functionality of sending through email the log.
+# What is SimpLog.Email
+Simple and very flexible library tool for .NET Core. Gives opportunity to receive logs via email with the proper configuration.
 
 # Log Types in SimpLog
 | Type | Description |
@@ -40,15 +39,14 @@ _simpLog.Trace("place your message here");
 
 options are as follows
 ```
-_simpLog.Info({1}, {2}, {3}); 
+_simpLog.Info({1}, {2}); 
 ```
 and only {1} is required
 
 | Option | Short Description | Full Description |
 | ----- | ----- | ----- |
 | {1} | Message | The message you want to log. |
-| {2} | Log Type | Type of the log |
-| {3} | Send Email | If it is set to false the email notifications will be disabled only for this instance. If null or true, depending on the appsettings.json file EmailConfiguration section. |
+| {2} | Send Email | If it is set to false the email notifications will be disabled only for this instance. If null or true, depending on the appsettings.json file EmailConfiguration section. |
 
 **In simplog.json**
 

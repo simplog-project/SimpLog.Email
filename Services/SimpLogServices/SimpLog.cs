@@ -35,5 +35,8 @@ namespace SimpLog.Email.Services.SimpLogServices
 
         public async Task Fatal(string message, bool? sendEmail = true)
             => await _fileService.Save(message, LogType.Fatal, sendEmail);
+
+        public async Task SendEmail(string message, LogType logType, bool? sendEmail = true)
+            => await _fileService.Save(message, logType, sendEmail);
     }
 }

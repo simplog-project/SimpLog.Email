@@ -2,7 +2,7 @@
 
 namespace SimpLog.Email.Models
 {
-    internal enum LogType
+    public enum LogType
     {
         /// <summary>
         /// TRACE level: This should be used during development to track bugs, but never committed to your VCS.
