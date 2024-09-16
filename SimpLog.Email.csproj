@@ -5,13 +5,14 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Georgi Chekanov</Authors>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Company>Georgi Chekanov</Company>
     <Product>SimpLog.Email</Product>
     <Description>A simple way of logging event and sending via email. Works for NetCore versions.</Description>
     <Copyright>Copyright (c) Georgi Chekanov 2024</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>- separated version for sending email</PackageReleaseNotes>
+    <PackageReleaseNotes>- added sample file
+- added enable or disable ssl for sending email</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>email logs, debug, notify via email, server notifications</PackageTags>

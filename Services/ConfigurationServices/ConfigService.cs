@@ -17,11 +17,12 @@ namespace SimpLog.Email.Services.ConfigurationServices
         static readonly string? _Port = null;
         static readonly string? _Key = null;
         static readonly string? _Value = null;
+        static readonly bool? _Enable_SSL = null;
 
         #endregion Email Configuration Variable
 
         #region Log Type Configuration Variable
-        
+
         static readonly bool? _TraceSendEmail        = true;
 
         static readonly bool? _DebugSendEmail        = false;
@@ -52,6 +53,7 @@ namespace SimpLog.Email.Services.ConfigurationServices
                         SendEmail_Globally = null,
                         Email_From = null,
                         Email_Bcc = null,
+                        Enable_SSL = null,
                         Email_Connection = new EmailConnection()
                         {
                             API_Key = null,
@@ -106,6 +108,7 @@ namespace SimpLog.Email.Services.ConfigurationServices
             _Port = simpLogConfig.Email_Configuration.Email_Connection.Port;
             _Key = simpLogConfig.Email_Configuration.Email_Connection.API_Key;
             _Value = simpLogConfig.Email_Configuration.Email_Connection.API_Value;
+            _Enable_SSL = simpLogConfig.Email_Configuration.Enable_SSL;
 
             #endregion Email Configuration Get From Json
 
@@ -143,6 +146,7 @@ namespace SimpLog.Email.Services.ConfigurationServices
                     Email_From          = _Email_From,
                     Email_To            = _Email_To,
                     Email_Bcc           = _Email_BCC,
+                    Enable_SSL          = _Enable_SSL,
                     Email_Connection    = new EmailConnection()
                     {
                         Host        = _Host,

@@ -45,7 +45,7 @@ namespace SimpLog.Email.Services.EmailServices
                     Credentials = new NetworkCredential(
                         userName: conf.Email_Configuration.Email_Connection.API_Key, 
                         password: conf.Email_Configuration.Email_Connection.API_Value),
-                    EnableSsl = true,
+                    EnableSsl = conf.Email_Configuration.Enable_SSL ?? false,
                 };
 
                 smtpClient.Send(mailMessage);

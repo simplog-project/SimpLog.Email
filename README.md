@@ -52,6 +52,8 @@ and only {1} is required
 
 Create simplog.json file in the root folder of your startup project. On the same level where is appsettings.json. Please have in mind that every configuration in simplog.json is optional ☺️
 
+An example for simplog.json can be found in folder samples.
+
 ```
 {
     "Email_Configuration": {                -> Email configuration.
@@ -59,6 +61,7 @@ Create simplog.json file in the root folder of your startup project. On the same
       "Email_From": string,                 -> Who will be the sender of your emails.
       "Email_To": string,                   -> Who will be the recipient of the emails.
       "Email_BCC": string,                  -> If you want, you can add blind copy.
+      "Enable_SSL": bool,                   -> Enable or disable ssl
       "Email_Connection": {                 -> Email configuration to the email service provider.
         "Host": string,
         "Port": string,

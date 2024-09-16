@@ -10,6 +10,8 @@
 
         public string? Email_Bcc { get; set; }
 
+        public bool? Enable_SSL { get; set; }
+
         public EmailConnection? Email_Connection { get; set; }
     }
 }

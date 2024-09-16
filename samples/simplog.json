@@ -1,0 +1,38 @@
+{
+  "Email_Configuration": {
+    "SendEmail_Globally": true,
+    "Email_From": "",
+    "Email_To": "",
+    "Email_BCC": "",
+    "Enable_SSL": true,
+    "Email_Connection": {
+      "Host": "",
+      "Port": "",
+      "API_Key": "",
+      "API_Value": ""
+    }
+  },
+  "LogType": {
+    "Trace": {
+      "SendEmail": true
+    },
+    "Debug": {
+      "SendEmail": true
+    },
+    "Info": {
+      "SendEmail": true
+    },
+    "Notice": {
+      "SendEmail": true
+    },
+    "Warn": {
+      "SendEmail": true
+    },
+    "Error": {
+      "SendEmail": true
+    },
+    "Fatal": {
+      "SendEmail": true
+    }
+  }
+}
