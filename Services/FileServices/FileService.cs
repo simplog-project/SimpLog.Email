@@ -16,41 +16,32 @@ namespace SimpLog.Email.Services.FileServices
 
         public static Models.AppSettings.Configuration configuration = ConfigurationServices.ConfigService.BindConfigObject();
         
-        internal readonly bool? _Trace_Email  = (configuration.LogType.Trace.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Trace.SendEmail);
-        internal readonly bool? _Debug_Email  = (configuration.LogType.Debug.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Debug.SendEmail);
-        internal readonly bool? _Info_Email   = (configuration.LogType.Info.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Info.SendEmail);
-        internal readonly bool? _Notice_Email = (configuration.LogType.Notice.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Notice.SendEmail);
-        internal readonly bool? _Warn_Email   = (configuration.LogType.Warn.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Warn.SendEmail);
-        internal readonly bool? _Error_Email  = (configuration.LogType.Error.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Error.SendEmail);
-        internal readonly bool? _Fatal_Email  = (configuration.LogType.Fatal.SendEmail == null) ? true : Convert.ToBoolean(configuration.LogType.Fatal.SendEmail);
+        private static bool GetLogTypeEnabled(bool? value) => value ?? true;
 
+        internal readonly bool? _Trace_Email  = GetLogTypeEnabled(configuration.LogType.Trace.SendEmail);
+        internal readonly bool? _Debug_Email  = GetLogTypeEnabled(configuration.LogType.Debug.SendEmail);
+        internal readonly bool? _Info_Email   = GetLogTypeEnabled(configuration.LogType.Info.SendEmail);
+        internal readonly bool? _Notice_Email = GetLogTypeEnabled(configuration.LogType.Notice.SendEmail);
+        internal readonly bool? _Warn_Email   = GetLogTypeEnabled(configuration.LogType.Warn.SendEmail);
+        internal readonly bool? _Error_Email  = GetLogTypeEnabled(configuration.LogType.Error.SendEmail);
+        internal readonly bool? _Fatal_Email  = GetLogTypeEnabled(configuration.LogType.Fatal.SendEmail);
+
+        private readonly Dictionary<LogType, bool?> _sendEmailMap = new Dictionary<LogType, bool?>()
+        {
+            { LogType.Trace, configuration.LogType.Trace.SendEmail},
+            { LogType.Debug, configuration.LogType.Debug.SendEmail},
+            { LogType.Info, configuration.LogType.Info.SendEmail },
+            { LogType.Notice, configuration.LogType.Notice.SendEmail },
+            { LogType.Warn, configuration.LogType.Warn.SendEmail },
+            { LogType.Error, configuration.LogType.Error.SendEmail },
+            { LogType.Fatal, configuration.LogType.Fatal.SendEmail }
+        };
         /// <summary>
         /// Converts message type from enum to string.
         /// </summary>
         /// <param name="logType"></param>
         /// <returns></returns>
-        internal string MessageType(LogType logType)
-        {
-            switch (logType)
-            {
-                case LogType.Trace:
-                    return LogType_Trace;
-                case LogType.Debug:
-                    return LogType_Debug;
-                case LogType.Info:
-                    return LogType_Info;
-                case LogType.Notice:
-                    return LogType_Notice;
-                case LogType.Warn:
-                    return LogType_Warn;
-                case LogType.Error:
-                    return LogType_Error;
-                case LogType.Fatal:
-                    return LogType_Fatal;
-                default:
-                    return LogType_NoType;
-            }
-        }
+        internal string MessageType(LogType logType) => logType.ToLabel();
 
         /// <summary>
         /// Distributes what type of save is it configured. File, Email of Database.
@@ -93,53 +84,8 @@ namespace SimpLog.Email.Services.FileServices
                 (configuration.Email_Configuration.SendEmail_Globally is not null && configuration.Email_Configuration.SendEmail_Globally is false))
                 return false;
 
-            switch (logType)
-            {
-                case LogType.Trace:
-                    {
-                        if (_Trace_Email is not null && _Trace_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Debug:
-                    {
-                        if (_Debug_Email is not null && _Debug_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Info:
-                    {
-                        if (_Info_Email is not null && _Info_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Notice:
-                    {
-                        if (_Notice_Email is not null && _Notice_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Warn:
-                    {
-                        if (_Warn_Email is not null && _Warn_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Error:
-                    {
-                        if (_Error_Email is not null && _Error_Email is false)
-                            return false;
-                        break;
-                    }
-                case LogType.Fatal:
-                    {
-                        if (_Fatal_Email is not null && _Fatal_Email is false)
-                            return false;
-                        break;
-                    }
-            }
-
-            return true;
+            // Check if this log type is enabled for email
+            return _sendEmailMap.TryGetValue(logType, out var isEnabled) && isEnabled == true;
         }
 
         /// <summary>
@@ -165,27 +111,6 @@ namespace SimpLog.Email.Services.FileServices
         /// </summary>
         /// <param name="logType"></param>
         /// <returns></returns>
-        internal bool ToSendMail(LogType logType)
-        {
-            switch(logType)
-            { 
-                case LogType.Trace:
-                    return configuration.LogType.Trace.SendEmail.Value;
-                case LogType.Debug:
-                    return configuration.LogType.Debug.SendEmail.Value;
-                case LogType.Info:
-                    return configuration.LogType.Info.SendEmail.Value;
-                case LogType.Notice:
-                    return configuration.LogType.Notice.SendEmail.Value;
-                case LogType.Warn:
-                    return configuration.LogType.Warn.SendEmail.Value;
-                case LogType.Error:
-                    return configuration.LogType.Error.SendEmail.Value;
-                case LogType.Fatal:
-                    return configuration.LogType.Fatal.SendEmail.Value;
-                default:
-                    return false;
-            }
-        }
+        internal bool ToSendMail(LogType logType) => _sendEmailMap.TryGetValue(logType, out var value) && value == true;
     }
 }

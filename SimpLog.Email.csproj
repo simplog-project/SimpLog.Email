@@ -5,18 +5,17 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Georgi Chekanov</Authors>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Company>Georgi Chekanov</Company>
     <Product>SimpLog.Email</Product>
-    <Description>A simple way of logging event and sending via email. Works for NetCore versions.</Description>
-    <Copyright>Copyright (c) Georgi Chekanov 2024</Copyright>
+    <Description>Email logging provider for SimpLog. Sends log events via SMTP.</Description>
+    <Copyright>Copyright (c) Georgi Chekanov 2025</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>- added sample file
-- added enable or disable ssl for sending email</PackageReleaseNotes>
+    <PackageReleaseNotes>- optimised the library</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>email logs, debug, notify via email, server notifications</PackageTags>
-    <PackageProjectUrl></PackageProjectUrl>
+    <PackageTags>logging email logger smtp errorlog notifications diagnostics simpLog</PackageTags>
+    <PackageProjectUrl>https://github.com/simplog-project/SimpLog.Email</PackageProjectUrl>
     <RepositoryUrl>https://github.com/simplog-project/SimpLog.Email</RepositoryUrl>
   </PropertyGroup>
 

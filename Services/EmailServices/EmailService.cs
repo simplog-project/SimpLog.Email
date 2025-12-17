@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace SimpLog.Email.Services.EmailServices
 {
@@ -12,50 +13,63 @@ namespace SimpLog.Email.Services.EmailServices
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static void SendMail(string? message)
+        public static async Task SendMail(string? message)
         {
             try
             {
                 Configuration conf = ConfigurationServices.ConfigService.BindConfigObject();
+                var emailConfig = conf.Email_Configuration;
+                var connection = emailConfig.Email_Connection;
 
                 //  Check if at all is not disabled sending emails
-                if (string.IsNullOrEmpty(conf.Email_Configuration.Email_From) ||
-                    string.IsNullOrEmpty(conf.Email_Configuration.Email_To) ||
-                    string.IsNullOrEmpty(conf.Email_Configuration.Email_Connection.API_Key) ||
-                    string.IsNullOrEmpty(conf.Email_Configuration.Email_Connection.API_Value) ||
-                    string.IsNullOrEmpty(conf.Email_Configuration.Email_Connection.Host) ||
-                    string.IsNullOrEmpty(conf.Email_Configuration.Email_Connection.Port))
+                if (!IsEmailConfigurationValid(emailConfig))
                     return;
 
-                var mailMessage = new MailMessage
+                using var mailMessage = new MailMessage
                 {
-                    From = new MailAddress(conf.Email_Configuration.Email_From),
-                    Subject = "SimpLog_" + DateTime.Now.DayOfYear.ToString(),
-                    Body = message,
-                    IsBodyHtml = true,
+                    From = new MailAddress(emailConfig.Email_From),
+                    Subject = $"SimpLog Error - {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Body = message ?? string.Empty,
+                    IsBodyHtml = true
                 };
-                mailMessage.To.Add(new MailAddress(conf.Email_Configuration.Email_To));
 
-                if (conf.Email_Configuration.Email_Bcc is not null)
-                    mailMessage.Bcc.Add(new MailAddress(conf.Email_Configuration.Email_Bcc));
+                mailMessage.To.Add(emailConfig.Email_To);
 
-                var smtpClient = new SmtpClient(conf.Email_Configuration.Email_Connection.Host)
+                if (!string.IsNullOrWhiteSpace(emailConfig.Email_Bcc))
+                    mailMessage.Bcc.Add(emailConfig.Email_Bcc);
+
+                if (!int.TryParse(connection.Port, out var port))
+                    return; // or log error
+
+                using var smtpClient = new SmtpClient(connection.Host)
                 {
-                    Port = int.Parse(conf.Email_Configuration.Email_Connection.Port),
+                    Port = int.Parse(connection.Port),
                     Credentials = new NetworkCredential(
-                        userName: conf.Email_Configuration.Email_Connection.API_Key, 
-                        password: conf.Email_Configuration.Email_Connection.API_Value),
-                    EnableSsl = conf.Email_Configuration.Enable_SSL ?? false,
+                        connection.API_Key,
+                        connection.API_Value),
+                    EnableSsl = emailConfig.Enable_SSL ?? false
                 };
 
-                smtpClient.Send(mailMessage);
-
-                smtpClient.Dispose();
+                await smtpClient.SendMailAsync(mailMessage);
             }
-            catch (SmtpFailedRecipientException ex)
+            catch (SmtpException ex)
             {
-                //await ImediateSaveMessageIntoLogFile("Email was not send successfully and message is" + message, LogType.Error);
+                // log SMTP failure
             }
+            catch (Exception ex)
+            {
+                // log unexpected failure
+            }
+        }
+
+        private static bool IsEmailConfigurationValid(EmailConfiguration config)
+        {
+            return !string.IsNullOrWhiteSpace(config.Email_From)
+                && !string.IsNullOrWhiteSpace(config.Email_To)
+                && !string.IsNullOrWhiteSpace(config.Email_Connection.API_Key)
+                && !string.IsNullOrWhiteSpace(config.Email_Connection.API_Value)
+                && !string.IsNullOrWhiteSpace(config.Email_Connection.Host)
+                && int.TryParse(config.Email_Connection.Port, out _);
         }
     }
 }
